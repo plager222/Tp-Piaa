@@ -8,7 +8,7 @@ const preguntaService = new PreguntaService();
 router.get('', async(req,res)=>
 {
     console.log('Get all')
-    const pregunta = await preguntaService.GetPreguntas()
+    const pregunta = await preguntaService.GetPreguntas(req.query)
     return res.status(200).json(pregunta)
 })
 router.get('/azar', async (req, res) => {

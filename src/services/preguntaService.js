@@ -4,10 +4,6 @@ import 'dotenv/config'
 
 export class PreguntaService {
     UpdatePregunta = async (Pregunta, Id) => {
-
-
-
-
         const pool = await sql.connect(configDB)
         const preguntaOriginal = await this.GetPreguntaById(Id)
 
@@ -59,15 +55,36 @@ export class PreguntaService {
         console.log(results)
     }
 
-    GetPreguntas = async () => {
+    GetPreguntas = async (req) => {
+        const pregunta = req?.pregunta ?? null
+        let order = req?.order ?? null
+
+
 
         const conn = await sql.connect(configDB)
+        let query = 'SELECT * FROM Preguntas'
+
+        if (pregunta) {
+
+            query += ` WHERE Pregunta LIKE '%${pregunta}%' `
+        }
+        if (order) {
+
+            order = order.toUpperCase()
+
+            if (order == "DESC") {
+                query += ' ORDER BY FechaCreacion DESC'
+
+            }
+            else if (order == "ASC") {
+                query += ' ORDER BY FechaCreacion ASC'
+            }
+        }
+
         const results = await conn.request()
-
-            .query('SELECT * FROM Preguntas')
-
-        return results.recordset
-    }
+            .query(query);
+        return results.recordset;
+    };
 
     GetRandomPregunta = async () => {
         const conn = await sql.connect(configDB)

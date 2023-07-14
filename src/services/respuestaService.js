@@ -33,13 +33,4 @@ export class RespuestaService {
         console.log(results)
 
     }
-    GetRespuestas = async () => {
-
-        const conn = await sql.connect(configDB)
-        const results = await conn.request()
-
-            .query('SELECT * FROM Respuestas')
-
-        return results.recordset
-    }
 }
